@@ -1,7 +1,6 @@
 import csv
 import requests
 import json
-import pandas as pd
 import time
 
 url = 'https://www.fir.com/wp-admin/admin-ajax.php'
@@ -16,10 +15,10 @@ headers = {
 }
 
 
-def load_more_agents(base_url, headers):
+def load_more_agents(headers):
     all_agents = []
     page_num = 1
-    loaded_agents = []  # Initialize a list to keep track of loaded agents
+    loaded_agents = []
 
     while True:
         print(f"Fetching page {page_num}...")
@@ -57,7 +56,7 @@ def load_more_agents(base_url, headers):
                         })
 
                 page_num += 1
-                time.sleep(1)  # Add a short delay to avoid hitting the server too frequently
+                time.sleep(1)
 
             except json.JSONDecodeError as e:
                 print(f"Error decoding JSON: {str(e)}")
@@ -78,7 +77,7 @@ def save_to_csv(all_agents, filename):
         writer.writerows(all_agents)
 
 
-all_agents = load_more_agents(base_url, headers)
+all_agents = load_more_agents(headers)
 save_to_csv(all_agents, 'agents_data.csv')
 
 print(f"Total agents scraped: {len(all_agents)}")
